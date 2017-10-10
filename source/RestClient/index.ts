@@ -1,3 +1,3 @@
 export { Connection } from "./Connection"
-export { Response } from "./Response"
-export { Status } from "./Status"
+export { IResponse } from "./IResponse"
+export { IStatus } from "./IStatus"

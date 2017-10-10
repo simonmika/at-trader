@@ -2,9 +2,9 @@ import * as Moment from "moment"
 
 export class Transaction {
 	constructor(
-		public time: Moment.Moment,
-		public volume: number,
-		public price: number) { }
+		public readonly time: Moment.Moment,
+		public readonly volume: number,
+		public readonly price: number) { }
 	asCsv(): string {
 		return `${this.time}, ${this.volume}, ${this.price}\n`
 	}

@@ -3,82 +3,81 @@ import * as Moment from "moment"
 import { Transaction } from "./Transaction"
 
 export class Transactions {
-	private volume: number
-	private amount: number
-	private averagePrice: number
-	private minimumPrice: number
-	private maximumPrice: number
-	private firstPrice: number
-	private lastPrice: number
-	private startTime: Moment.Moment
-	private endTime: Moment.Moment
-	constructor(private data: Transaction[]) {
+	private volumeCache: number
+	get volume(): number {
+		if (!this.volumeCache)
+			this.volumeCache = this.data.map(deal => deal.volume).reduce((sum, current) => sum + current, 0)
+		return this.volumeCache
 	}
-	getVolume(): number {
-		if (!this.volume)
-			this.volume = this.data.map(deal => deal.volume).reduce((sum, current) => sum + current, 0)
-		return this.volume
+	private amountCache: number
+	get amount(): number {
+		if (!this.amountCache)
+			this.amountCache = this.data.map(deal => deal.price * deal.volume).reduce((sum, current) => sum + current, 0)
+		return this.amountCache
 	}
-	getAmount(): number {
-		if (!this.amount)
-			this.amount = this.data.map(deal => deal.price * deal.volume).reduce((sum, current) => sum + current, 0)
-		return this.amount
+	private averagePriceCache: number
+	get averagePrice(): number {
+		if (!this.averagePriceCache)
+			this.averagePriceCache = this.amount / this.volume
+		return this.averagePriceCache
 	}
-	getAveragePrice(): number {
-		if (!this.averagePrice)
-			this.averagePrice = this.getAmount() / this.getVolume()
-		return this.averagePrice
-	}
-	getMinimumPrice(): number {
-		if (!this.minimumPrice) {
+	private minimumPriceCache: number
+	get minimumPrice(): number {
+		if (!this.minimumPriceCache) {
 			this.data.forEach(deal => {
-				if (!this.minimumPrice || this.minimumPrice > deal.price)
-					this.minimumPrice = deal.price
+				if (!this.minimumPriceCache || this.minimumPriceCache > deal.price)
+					this.minimumPriceCache = deal.price
 			})
 		}
-		return this.minimumPrice
+		return this.minimumPriceCache
 	}
-	getMaximumPrice(): number {
-		if (!this.maximumPrice) {
+	private maximumPriceCache: number
+	get maximumPrice(): number {
+		if (!this.maximumPriceCache) {
 			this.data.forEach(deal => {
-				if (!this.maximumPrice || this.maximumPrice > deal.price)
-					this.maximumPrice = deal.price
+				if (!this.maximumPriceCache || this.maximumPriceCache > deal.price)
+					this.maximumPriceCache = deal.price
 			})
 		}
-		return this.maximumPrice
+		return this.maximumPriceCache
 	}
-	getFirstPrice(): number {
-		if (!this.firstPrice && this.data.length > 0)
-			this.firstPrice = this.data[this.data.length - 1].price
-		return this.firstPrice
+	private firstPriceCache: number
+	get firstPrice(): number {
+		if (!this.firstPriceCache && this.data.length > 0)
+			this.firstPriceCache = this.data[this.data.length - 1].price
+		return this.firstPriceCache
 	}
-	getLastPrice(): number {
-		if (!this.lastPrice && this.data.length > 0)
-			this.lastPrice = this.data[0].price
-		return this.lastPrice
+	private lastPriceCache: number
+	get lastPrice(): number {
+		if (!this.lastPriceCache && this.data.length > 0)
+			this.lastPriceCache = this.data[0].price
+		return this.lastPriceCache
 	}
-	getStartTime(): Moment.Moment {
-		if (!this.startTime && this.data.length > 0)
-			this.startTime = this.data[this.data.length - 1].time
-		return this.startTime
+	private startTimeCache: Moment.Moment
+	get startTime(): Moment.Moment {
+		if (!this.startTimeCache && this.data.length > 0)
+			this.startTimeCache = this.data[this.data.length - 1].time
+		return this.startTimeCache
 	}
-	getEndTime(): Moment.Moment {
-		if (!this.endTime && this.data.length > 0)
-			this.endTime = this.data[0].time
-		return this.endTime
+	private endTimeCache: Moment.Moment
+	get endTime(): Moment.Moment {
+		if (!this.endTimeCache && this.data.length > 0)
+			this.endTimeCache = this.data[0].time
+		return this.endTimeCache
 	}
+	constructor(private data: Transaction[]) { }
 	getDealsAsCsv(): string {
 		return "time, volume, price\n" + this.data.map(deal => deal.asCsv()).join("")
 	}
 	asCsv(): string {
-		return `${this.getStartTime()}, ${this.getEndTime()}, ${this.getVolume()}, ${this.getAveragePrice()}, ${this.getFirstPrice()}, ${this.getLastPrice()}, ${this.getMinimumPrice()}, ${this.getMaximumPrice()}\n`
+		return `${this.startTime}, ${this.endTime}, ${this.volume}, ${this.averagePrice}, ${this.firstPrice}, ${this.lastPrice}, ${this.minimumPrice}, ${this.maximumPrice}\n`
 	}
 	merge(other: Transactions): Transactions {
 		return new Transactions(this.data.concat(other.data).sort((left, right) => left.time.valueOf() - right.time.valueOf()))
 	}
 	split(interval: Moment.Duration): Transactions[] {
 		const result = [] as Transactions[]
-		let start = this.startTime
+		let start = this.startTimeCache
 		do {
 			const end = start.add(interval)
 			const data = this.data.filter(deal => deal.time >= start && deal.time < end)
