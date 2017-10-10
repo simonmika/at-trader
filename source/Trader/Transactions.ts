@@ -66,11 +66,11 @@ export class Transactions {
 		return this.endTimeCache
 	}
 	constructor(private data: Transaction[]) { }
-	getDealsAsCsv(): string {
+	getTransactionsAsCsv(): string {
 		return "time, volume, price\n" + this.data.map(deal => deal.asCsv()).join("")
 	}
 	asCsv(): string {
-		return `${this.startTime}, ${this.endTime}, ${this.volume}, ${this.averagePrice}, ${this.firstPrice}, ${this.lastPrice}, ${this.minimumPrice}, ${this.maximumPrice}\n`
+		return `${this.startTime.toISOString()}, ${this.endTime.toISOString()}, ${this.volume}, ${this.averagePrice}, ${this.firstPrice}, ${this.lastPrice}, ${this.minimumPrice}, ${this.maximumPrice}\n`
 	}
 	merge(other: Transactions): Transactions {
 		return new Transactions(this.data.concat(other.data).sort((left, right) => left.time.valueOf() - right.time.valueOf()))
