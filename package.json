@@ -1,0 +1,41 @@
+{
+  "name": "at-trader",
+  "version": "1.0.0",
+  "description": "Robot Trader for AktieTorget Stocks.",
+  "main": "build/index.js",
+  "scripts": {
+    "setup": "npm install",
+    "start": "node ./build/app.js",
+    "prestart": "npm run build",
+    "prebuild": "tslint --config .vscode/tslint.json --project source/tsconfig.json",
+    "build": "tsc -p ./source && echo '#!/usr/bin/env node' > build/app && browserify --node build/index.js >> build/app && chmod 755 build/app",
+    "predeploy": "npm install && npm run build",
+    "deploy": "sudo cp build/app /usr/local/bin/at-trader",
+    "clean": "rm -rf build node_modules",
+    "dev": "watch 'npm run build' source",
+    "pretest": "npm run build",
+    "test": "node ./build/index.js self-test",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.26",
+    "browserify": "^14.4.0",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.2"
+  },
+  "dependencies": {
+    "@cogneco/mend": "^1.2.10",
+    "@types/moment": "^2.13.0",
+    "moment": "^2.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonmika/at-trader.git"
+  },
+  "author": "Simon Mika",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/simonmika/at-trader/issues"
+  },
+  "homepage": "https://github.com/simonmika/at-trader#readme"
+}

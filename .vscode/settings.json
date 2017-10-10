@@ -1,0 +1,29 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+	"editor.tabSize": 2,
+	"editor.detectIndentation": false,
+	"editor.renderWhitespace": "boundary",
+	"editor.insertSpaces": false,
+	"files.trimTrailingWhitespace": true,
+	"search.exclude": {
+		"node_modules": true,
+		"typings": true,
+		".vscode": true
+	},
+	"files.exclude": {
+		"node_modules": true,
+		".vscode": false,
+		"build": true,
+		"**/.git": true
+	},
+	"files.encoding": "utf8",
+	"files.eol": "\n",
+
+	"tslint.enable": true,
+	"tslint.run": "onType",
+	"tslint.configFile": "./.vscode/tslint.json",
+	"licenser.license": "AGPLv3",
+	"licenser.projectName": "AT-Trader",
+	"licenser.author": "Simon Mika <simon@mika.se>",
+	"licenser.useSingleLineStyle": true
+}
