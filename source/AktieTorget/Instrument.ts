@@ -5,12 +5,12 @@ import { IDeal } from "./IDeal"
 import { IOrders } from "./IOrders"
 import { IOrdersLevel } from "./IOrdersLevel"
 
-export class Connection {
-	private constructor(private backend: RestClient.Connection) {
+export class Instrument {
+	private constructor(private connection: RestClient.Connection, private identifier: string) {
 	}
 
-	getTransactions(instrument: string, from = new Date(Date.now())): Promise<Trader.Transactions> {
-		return this.backend.get(`/getinstrumentdeals.json?id=${instrument}&DateFrom=${from.toLocaleDateString("SE-sv")}`)
+	getTransactions(from = new Date(Date.now())): Promise<Trader.Transactions> {
+		return this.connection.get(`/getinstrumentdeals.json?id=${this.identifier}&DateFrom=${from.toLocaleDateString("SE-sv")}`)
 			.then(
 				response => response && response.status.code == 200 ?
 				new Trader.Transactions((response.body as IDeal[])
@@ -19,11 +19,11 @@ export class Connection {
 				reason => reason,
 			)
 	}
-	getOrderBook(instrument: string): Promise<Trader.OrderBook> {
-		return this.backend.get(`/getinstrumentorders.json?id=${instrument}`)
+	getOrderBook(): Promise<Trader.OrderBook> {
+		return this.connection.get(`/getinstrumentorders.json?id=${this.identifier}`)
 			.then(
 				response => response && response.status.code == 200 ?
-				Connection.convert(response.body as IOrders) :
+				Instrument.convert(response.body as IOrders) :
 				undefined,
 				reason => reason,
 			)
@@ -39,7 +39,7 @@ export class Connection {
 		})
 		return new Trader.OrderBook(new Trader.Orders(buy), new Trader.Orders(sell))
 	}
-	static open(): Connection {
-		return new Connection(new RestClient.Connection("json.aktietorget.se", false))
+	static open(identifier: string): Instrument {
+		return new Instrument(new RestClient.Connection("json.aktietorget.se", false), identifier)
 	}
 }

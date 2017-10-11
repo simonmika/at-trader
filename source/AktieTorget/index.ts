@@ -1,1 +1,1 @@
-export { Connection } from "./Connection"
+export { Instrument } from "./Instrument"
