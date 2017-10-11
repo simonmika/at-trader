@@ -19,7 +19,7 @@ export class Connection {
 				reason => reason,
 			)
 	}
-	getOrders(instrument: string): Promise<Trader.Orders> {
+	getOrderBook(instrument: string): Promise<Trader.OrderBook> {
 		return this.backend.get(`/getinstrumentorders.json?id=${instrument}`)
 			.then(
 				response => response && response.status.code == 200 ?
@@ -28,7 +28,7 @@ export class Connection {
 				reason => reason,
 			)
 	}
-	private static convert(orders: IOrders): Trader.Orders {
+	private static convert(orders: IOrders): Trader.OrderBook {
 		const buy: Trader.Order[] = []
 		const sell: Trader.Order[] = []
 		orders.Levels.forEach(order => {
@@ -37,7 +37,7 @@ export class Connection {
 			if (order.BidCount > 0)
 				buy.push(new Trader.Order(order.BidPrice, order.BidVolume, order.BidCount))
 		})
-		return new Trader.Orders(buy, sell)
+		return new Trader.OrderBook(new Trader.Orders(buy), new Trader.Orders(sell))
 	}
 	static open(): Connection {
 		return new Connection(new RestClient.Connection("json.aktietorget.se", false))
