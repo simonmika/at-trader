@@ -9,6 +9,18 @@ export class Orders {
 			this.volumeCache = this.data.reduce((accumulated, order) => accumulated + order.volume, 0)
 		return this.volumeCache
 	}
+	amountCache: number
+	get amount(): number {
+		if (!this.amountCache)
+			this.amountCache = this.data.reduce((accumulated, order) => accumulated + order.price * order.volume, 0)
+		return this.amountCache
+	}
+	averageCache: number
+	get average(): number {
+		if (!this.averageCache)
+			this.averageCache = this.amount / this.volume
+		return this.averageCache
+	}
 	constructor(readonly data: Order[]) {
 	}
 	getOrdersAsCsv(): string {
@@ -29,6 +41,20 @@ export class Orders {
 				count -= order.volume
 			} else
 				break
+		return new Orders(result)
+	}
+	selectMinimumPrice(level: number): Orders {
+		const result: Order[] = []
+		for (const order of this.data)
+			if (order.price >= level)
+				result.push(order)
+		return new Orders(result)
+	}
+	selectMaximumPrice(level: number): Orders {
+		const result: Order[] = []
+		for (const order of this.data)
+			if (order.price <= level)
+				result.push(order)
 		return new Orders(result)
 	}
 }

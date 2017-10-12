@@ -1,2 +1,2 @@
-# at-trader
-Robotic Trader for AktieTorget stocks.
+# StockInt
+Stock analyzer for instruments listed on AktieTorget.

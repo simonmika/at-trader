@@ -1,7 +1,7 @@
 {
-  "name": "at-trader",
+  "name": "stockint",
   "version": "1.0.0",
-  "description": "Robot Trader for AktieTorget Stocks.",
+  "description": "Stock Analyzer for Instruments listed on AktieTorget.",
   "main": "build/index.js",
   "scripts": {
     "setup": "npm install",
@@ -10,7 +10,7 @@
     "prebuild": "tslint --config .vscode/tslint.json --project source/tsconfig.json",
     "build": "tsc -p ./source && echo '#!/usr/bin/env node' > build/app && browserify --node build/index.js >> build/app && chmod 755 build/app",
     "predeploy": "npm install && npm run build",
-    "deploy": "sudo cp build/app /usr/local/bin/at-trader",
+    "deploy": "sudo cp build/app /usr/local/bin/stockint",
     "clean": "rm -rf build node_modules",
     "dev": "watch 'npm run build' source",
     "pretest": "npm run build",
@@ -30,12 +30,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/simonmika/at-trader.git"
+    "url": "git+https://github.com/simonmika/stockint.git"
   },
   "author": "Simon Mika",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/simonmika/at-trader/issues"
+    "url": "https://github.com/simonmika/stockint/issues"
   },
-  "homepage": "https://github.com/simonmika/at-trader#readme"
+  "homepage": "https://github.com/simonmika/stockint#readme"
 }
