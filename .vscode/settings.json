@@ -13,7 +13,7 @@
 	"files.exclude": {
 		"node_modules": true,
 		".vscode": false,
-		"build": true,
+		"dist": true,
 		"**/.git": true
 	},
 	"files.encoding": "utf8",
