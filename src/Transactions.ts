@@ -87,4 +87,12 @@ export class Transactions {
 		} while (start.valueOf() < this.endTime.valueOf())
 		return result
 	}
+	map(): Transaction[]
+	map<T>(map: (transaction: Transaction) => T): T[]
+	map<T>(map?: (transaction: Transaction) => T): T[] | Transaction[] {
+		return map ? this.data.map(map) : this.data
+	}
+	reduce<T>(reduce: (previous: T, current: Transaction) => T, initial: T): T {
+		return this.data.reduce(reduce, initial)
+	}
 }

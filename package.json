@@ -2,7 +2,8 @@
   "name": "stockint",
   "version": "1.0.0",
   "description": "Stock Analyzer for Instruments listed on AktieTorget.",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "setup": "npm install",
     "start": "node ./dist/app.js",
@@ -24,8 +25,8 @@
     "typescript": "^2.5.2"
   },
   "dependencies": {
-    "@cogneco/mend": "^1.2.10",
     "@types/moment": "^2.13.0",
+    "@cogneco/mend": "^1.2.10",
     "moment": "^2.19.0"
   },
   "repository": {

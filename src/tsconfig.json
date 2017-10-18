@@ -6,9 +6,11 @@
 		"removeComments": true,
 		"preserveConstEnums": true,
 		"sourceMap": true,
+		"declaration": true,
 		"outDir": "../dist/"
 	},
 	"files": [
-		"index.ts"
+		"index.ts",
+		"cli.ts"
 	]
 }
