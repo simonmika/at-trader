@@ -1,1 +1,1 @@
-export { Instrument } from "./Instrument"
+import "./Instrument"
