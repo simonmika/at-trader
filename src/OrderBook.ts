@@ -1,5 +1,6 @@
 import { Order } from "./Order"
 import { Orders } from "./Orders"
+
 export class OrderBook {
 	get average(): number {
 		return (this.buy.average + this.sell.average) / 2

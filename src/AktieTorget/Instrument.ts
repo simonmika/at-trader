@@ -1,4 +1,3 @@
-import * as Moment from "moment"
 import * as RestClient from "../RestClient"
 import { Instrument as BaseInstrument } from "../Instrument"
 import { Transaction as BaseTransaction } from "../Transaction"
@@ -20,7 +19,7 @@ export class Instrument extends BaseInstrument {
 			.then(
 				response => response && response.status.code == 200 ?
 				new BaseTransactions((response.body as IDeal[])
-					.map(deal => new BaseTransaction(Moment(deal.DealDateTime), deal.Volume,	deal.Price, deal.SellerShortName, deal.BuyerShortName)).sort((left, right) => left.time.valueOf() - right.time.valueOf())) :
+					.map(deal => new BaseTransaction(new Date(Date.parse(deal.DealDateTime)), deal.Volume,	deal.Price, deal.SellerShortName, deal.BuyerShortName)).sort((left, right) => left.time.valueOf() - right.time.valueOf())) :
 				undefined,
 				reason => reason,
 			)

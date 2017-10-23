@@ -1,8 +1,6 @@
-import * as Moment from "moment"
-
 export class Transaction {
 	constructor(
-		readonly time: Moment.Moment,
+		readonly time: Date,
 		readonly volume: number,
 		readonly price: number,
 		readonly seller: string,

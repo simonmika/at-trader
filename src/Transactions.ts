@@ -1,6 +1,5 @@
-import * as Moment from "moment"
-
 import { Transaction } from "./Transaction"
+import { Intervall, increase, round } from "./Intervall"
 
 export class Transactions {
 	private volumeCache: number
@@ -35,7 +34,7 @@ export class Transactions {
 	get maximumPrice(): number {
 		if (!this.maximumPriceCache) {
 			this.data.forEach(deal => {
-				if (!this.maximumPriceCache || this.maximumPriceCache > deal.price)
+				if (!this.maximumPriceCache || this.maximumPriceCache < deal.price)
 					this.maximumPriceCache = deal.price
 			})
 		}
@@ -53,16 +52,16 @@ export class Transactions {
 			this.lastPriceCache = this.data[0].price
 		return this.lastPriceCache
 	}
-	private startTimeCache: Moment.Moment
-	get startTime(): Moment.Moment {
+	private startTimeCache: Date
+	get startTime(): Date {
 		if (!this.startTimeCache && this.data.length > 0)
-			this.startTimeCache = this.data[this.data.length - 1].time
+		this.startTimeCache = this.data[0].time
 		return this.startTimeCache
 	}
-	private endTimeCache: Moment.Moment
-	get endTime(): Moment.Moment {
+	private endTimeCache: Date
+	get endTime(): Date {
 		if (!this.endTimeCache && this.data.length > 0)
-			this.endTimeCache = this.data[0].time
+		this.endTimeCache = this.data[this.data.length - 1].time
 		return this.endTimeCache
 	}
 	constructor(private data: Transaction[]) { }
@@ -73,13 +72,13 @@ export class Transactions {
 		return `${this.startTime.toISOString()}, ${this.endTime.toISOString()}, ${this.volume}, ${this.averagePrice}, ${this.firstPrice}, ${this.lastPrice}, ${this.minimumPrice}, ${this.maximumPrice}\n`
 	}
 	merge(other: Transactions): Transactions {
-		return new Transactions(this.data.concat(other.data).sort((left, right) => left.time.valueOf() - right.time.valueOf()))
+		return new Transactions(this.data.concat(other.data).sort((left, right) => right.time.valueOf() - left.time.valueOf()))
 	}
-	split(interval: Moment.Duration): Transactions[] {
+	split(intervall: Intervall): Transactions[] {
+		let start = round(this.startTime, intervall)
 		const result = [] as Transactions[]
-		let start = this.startTimeCache
 		do {
-			const end = start.add(interval)
+			const end = increase(start, intervall)
 			const data = this.data.filter(deal => deal.time >= start && deal.time < end)
 			if (data && data.length > 0)
 				result.push(new Transactions(data))
@@ -94,5 +93,8 @@ export class Transactions {
 	}
 	reduce<T>(reduce: (previous: T, current: Transaction) => T, initial: T): T {
 		return this.data.reduce(reduce, initial)
+	}
+	filter(predicate: (transaction: Transaction) => boolean): Transactions {
+		return new Transactions(this.data.filter(predicate))
 	}
 }

@@ -1,4 +1,5 @@
 export { Instrument } from "./Instrument"
+export { Intervall } from "./Intervall"
 export { Order } from "./Order"
 export { OrderBook } from "./OrderBook"
 export { Orders } from "./Orders"

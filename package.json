@@ -22,13 +22,10 @@
     "@types/node": "^8.0.26",
     "browserify": "^14.4.0",
     "tslint": "^5.7.0",
-    "typescript": "^2.5.2"
+    "typescript": "^2.5.2",
+    "@types/moment": "^2.13.0"
   },
-  "dependencies": {
-    "@types/moment": "^2.13.0",
-    "@cogneco/mend": "^1.2.10",
-    "moment": "^2.19.0"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/simonmika/stockint.git"
