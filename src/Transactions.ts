@@ -14,68 +14,68 @@ export class Transactions {
 			this.amountCache = this.data.map(deal => deal.price * deal.volume).reduce((sum, current) => sum + current, 0)
 		return this.amountCache
 	}
-	private averagePriceCache: number
-	get averagePrice(): number {
-		if (!this.averagePriceCache)
-			this.averagePriceCache = this.amount / this.volume
-		return this.averagePriceCache
+	private averageCache: number
+	get average(): number {
+		if (!this.averageCache)
+			this.averageCache = this.amount / this.volume
+		return this.averageCache
 	}
-	private minimumPriceCache: number
-	get minimumPrice(): number {
-		if (!this.minimumPriceCache) {
+	private lowCache: number
+	get low(): number {
+		if (!this.lowCache) {
 			this.data.forEach(deal => {
-				if (!this.minimumPriceCache || this.minimumPriceCache > deal.price)
-					this.minimumPriceCache = deal.price
+				if (!this.lowCache || this.lowCache > deal.price)
+					this.lowCache = deal.price
 			})
 		}
-		return this.minimumPriceCache
+		return this.lowCache
 	}
-	private maximumPriceCache: number
-	get maximumPrice(): number {
-		if (!this.maximumPriceCache) {
+	private highCache: number
+	get high(): number {
+		if (!this.highCache) {
 			this.data.forEach(deal => {
-				if (!this.maximumPriceCache || this.maximumPriceCache < deal.price)
-					this.maximumPriceCache = deal.price
+				if (!this.highCache || this.highCache < deal.price)
+					this.highCache = deal.price
 			})
 		}
-		return this.maximumPriceCache
+		return this.highCache
 	}
-	private firstPriceCache: number
-	get firstPrice(): number {
-		if (!this.firstPriceCache && this.data.length > 0)
-			this.firstPriceCache = this.data[this.data.length - 1].price
-		return this.firstPriceCache
+	private openCache: number
+	get open(): number {
+		if (!this.openCache && this.data.length > 0)
+			this.openCache = this.data[this.data.length - 1].price
+		return this.openCache
 	}
-	private lastPriceCache: number
-	get lastPrice(): number {
-		if (!this.lastPriceCache && this.data.length > 0)
-			this.lastPriceCache = this.data[0].price
-		return this.lastPriceCache
+	private closeCache: number
+	get close(): number {
+		if (!this.closeCache && this.data.length > 0)
+			this.closeCache = this.data[0].price
+		return this.closeCache
 	}
-	private startTimeCache: Date
-	get startTime(): Date {
-		if (!this.startTimeCache && this.data.length > 0)
-		this.startTimeCache = this.data[0].time
-		return this.startTimeCache
+	private dateCache: Date
+	get date(): Date {
+		if (!this.dateCache && this.data.length > 0)
+		this.dateCache = this.data[0].time
+		return this.dateCache
 	}
-	private endTimeCache: Date
-	get endTime(): Date {
-		if (!this.endTimeCache && this.data.length > 0)
-		this.endTimeCache = this.data[this.data.length - 1].time
-		return this.endTimeCache
+	private endDateCache: Date
+	get endDate(): Date {
+		if (!this.endDateCache && this.data.length > 0)
+		this.endDateCache = this.data[this.data.length - 1].time
+		return this.endDateCache
 	}
 	constructor(private data: Transaction[]) { }
 	getTransactionsAsCsv(): string {
 		return "time, volume, price\n" + this.data.map(deal => deal.asCsv()).join("")
 	}
 	asCsv(): string {
-		return `${this.startTime.toISOString()}, ${this.endTime.toISOString()}, ${this.volume}, ${this.averagePrice}, ${this.firstPrice}, ${this.lastPrice}, ${this.minimumPrice}, ${this.maximumPrice}\n`
+		return `${this.date.toISOString()}, ${this.endDate.toISOString()}, ${this.volume}, ${this.average}, ${this.open}, ${this.close}, ${this.low}, ${this.high}\n`
 	}
 	merge(other: Transactions): Transactions {
 		return new Transactions(this.data.concat(other.data).sort((left, right) => right.time.valueOf() - left.time.valueOf()))
 	}
 	split(intervall: Intervall): Transactions[] {
-		let start = round(this.startTime, intervall)
+		let start = round(this.date, intervall)
 		const result = [] as Transactions[]
 		do {
 			const end = increase(start, intervall)
@@ -83,7 +83,7 @@ export class Transactions {
 			if (data && data.length > 0)
 				result.push(new Transactions(data))
 			start = end
-		} while (start.valueOf() < this.endTime.valueOf())
+		} while (start.valueOf() < this.endDate.valueOf())
 		return result
 	}
 	map(): Transaction[]
