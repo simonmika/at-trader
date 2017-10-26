@@ -5,7 +5,7 @@ async function run() {
 	if (instrument) {
 		const start = new Date(2017, 6, 1)
 		let result: Transactions
-		while (start.valueOf() < Date.now()) {
+		while (start.valueOf() <= Date.now()) {
 			start.setDate(start.getDate() + 1)
 			const transactions = (await instrument.getTransactions(start))
 			result = result ? result.merge(transactions) : transactions
