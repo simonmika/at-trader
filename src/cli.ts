@@ -3,7 +3,7 @@ import { Instrument, Transactions, Intervall } from "./"
 async function run() {
 	const instrument = await Instrument.open("SE0007692124")
 	if (instrument) {
-		const start = new Date(2017, 6, 1)
+		const start = new Date(2017, 1, 1)
 		let result: Transactions
 		while (start.valueOf() <= Date.now()) {
 			start.setDate(start.getDate() + 1)
@@ -25,5 +25,5 @@ async function run() {
 		// 	// instrument.getOrderBook().then(orderBook => console.log("buy\n" + orderBook.buy.getOrdersAsCsv() + "\nsell\n" + orderBook.sell.getOrdersAsCsv()))
 	}
 }
-run().then(() => console.log("done"))
-console.log("started")
+run().then(() => console.error("done"))
+console.error("started")
