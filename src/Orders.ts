@@ -1,5 +1,6 @@
 import { Order } from "./Order"
 export class Orders {
+	get length(): number { return this.data.length }
 	get first(): Order {
 		return this.data[0]
 	}
@@ -21,7 +22,10 @@ export class Orders {
 			this.averageCache = this.amount / this.volume
 		return this.averageCache
 	}
-	constructor(readonly data: Order[]) {
+	constructor(private readonly data: Order[]) {
+	}
+	get(index: number): Order {
+		return this.data[index]
 	}
 	getOrdersAsCsv(): string {
 		return "price, volume, count\n" + this.data.map(order => order.asCsv()).join("")
@@ -56,5 +60,16 @@ export class Orders {
 			if (order.price <= level)
 				result.push(order)
 		return new Orders(result)
+	}
+	map(): Order[]
+	map<T>(map: (order: Order) => T): T[]
+	map<T>(map?: (order: Order) => T): T[] | Order[] {
+		return map ? this.data.map(map) : this.data
+	}
+	reduce<T>(reduce: (previous: T, current: Order) => T, initial: T): T {
+		return this.data.reduce(reduce, initial)
+	}
+	filter(predicate: (order: Order) => boolean): Orders {
+		return new Orders(this.data.filter(predicate))
 	}
 }

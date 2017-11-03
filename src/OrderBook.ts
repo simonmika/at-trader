@@ -26,4 +26,11 @@ export class OrderBook {
 	selectPrice(minimum: number, maximum: number): OrderBook {
 		return new OrderBook(this.buy.selectMinimumPrice(minimum), this.sell.selectMaximumPrice(maximum))
 	}
+	zip(): { buy: Order, sell: Order }[] {
+		const result: { buy: Order, sell: Order }[] = []
+		const count = Math.max(this.buy.length, this.sell.length)
+		for (let i = 0; i < count; i++)
+			result.push({ buy: this.buy.get(i), sell: this.sell.get(i) })
+		return result
+	}
 }
