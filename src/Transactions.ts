@@ -43,13 +43,13 @@ export class Transactions {
 	private openCache: number
 	get open(): number {
 		if (!this.openCache && this.data.length > 0)
-			this.openCache = this.data[this.data.length - 1].price
+			this.openCache = this.data[0].price
 		return this.openCache
 	}
 	private closeCache: number
 	get close(): number {
 		if (!this.closeCache && this.data.length > 0)
-			this.closeCache = this.data[0].price
+			this.closeCache = this.data[this.data.length - 1].price
 		return this.closeCache
 	}
 	private dateCache: Date
@@ -76,12 +76,16 @@ export class Transactions {
 	}
 	split(intervall: Intervall): Transactions[] {
 		let start = round(this.date, intervall)
+		let close = this.open
 		const result = [] as Transactions[]
 		do {
 			const end = increase(start, intervall)
 			const data = this.data.filter(deal => deal.time >= start && deal.time < end)
-			if (data && data.length > 0)
-				result.push(new Transactions(data))
+			if (data.length == 0)
+				data.push(new Transaction(start, 0, close, "", ""))
+			const r = new Transactions(data)
+			result.push(r)
+			close = r.close
 			start = end
 		} while (start.valueOf() < this.endDate.valueOf())
 		return result
