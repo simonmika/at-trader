@@ -17,7 +17,7 @@ export class Transactions {
 	private averageCache: number
 	get average(): number {
 		if (!this.averageCache)
-			this.averageCache = this.amount / this.volume
+			this.averageCache = this.volume ? this.amount / this.volume : this.open
 		return this.averageCache
 	}
 	private lowCache: number
