@@ -90,6 +90,9 @@ export class Transactions {
 		} while (start.valueOf() < this.endDate.valueOf())
 		return result
 	}
+	apply(callback: (transaction: Transaction) => void): void {
+		this.data.forEach(callback)
+	}
 	map(): Transaction[]
 	map<T>(map: (transaction: Transaction) => T): T[]
 	map<T>(map?: (transaction: Transaction) => T): T[] | Transaction[] {

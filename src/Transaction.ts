@@ -1,4 +1,5 @@
 export class Transaction {
+	get amount() { return this.price * this.volume }
 	constructor(
 		readonly time: Date,
 		readonly volume: number,
