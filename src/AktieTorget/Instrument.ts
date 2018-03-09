@@ -9,8 +9,12 @@ import { IDeal } from "./IDeal"
 import { IOrders } from "./IOrders"
 import { IOrdersLevel } from "./IOrdersLevel"
 import { IInstrument } from "./IInstrument"
+import { Quote } from "../Quote"
 
 export class Instrument extends BaseInstrument {
+	getQuote(): Promise<Quote> {
+		return Promise.reject("Not supported")
+	}
 	private constructor(private data: IInstrument) {
 		super(data.ISIN, data.Name, data.ShortName, data.NoOfStocks)
 	}
